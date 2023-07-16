@@ -166,7 +166,6 @@ JOIN inventory i ON (r.inventory_id = i.inventory_id);
 
 
 
--- start schema
 SELECT dimMovie.title, dimDate.month, dimCustomer.city, sum(sales_amount) as revenue
 FROM factSales 
 JOIN dimMovie on (dimMovie.movie_key = factSales.movie_key)
@@ -176,7 +175,7 @@ group by (dimMovie.title, dimDate.month, dimCustomer.city)
 order by dimMovie.title, dimDate.month, dimCustomer.city, revenue desc;
 
 
--- 3nf
+
 SELECT f.title, EXTRACT(month FROM p.payment_date) as month, ci.city, sum(p.amount) as revenue
 FROM payment p
 JOIN rental r    ON ( p.rental_id = r.rental_id )
