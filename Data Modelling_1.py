@@ -1,12 +1,8 @@
 
-# In[1]:
 
 
 import psycopg2
 import pandas as pd
-
-
-# In[2]:
 
 
 def create_database():
@@ -23,16 +19,12 @@ def create_database():
     return cur, conn
 
 
-# In[3]:
-
 
 def drop_table(cur, conn):
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
-
-# In[4]:
 
 
 def create_table(cur, conn):
@@ -41,67 +33,45 @@ def create_table(cur, conn):
         conn.commit()
 
 
-# In[5]:
-
 
 AccountsCountry = pd.read_csv("data/Wealth-AccountsCountry.csv")
 
-
-# In[6]:
 
 
 AccountsCountry_clean = AccountsCountry[['Code','Short Name','Table Name','Long Name','Currency Unit']]
 
 
-# In[7]:
-
 
 AccountsCountry_clean.head()
 
-
-# In[8]:
 
 
 AccountsData = pd.read_csv("data/Wealth-AccountData.csv")
 
 
-# In[9]:
-
 
 AccountsData_clean = AccountsData[['Country Name', 'Country Code', 'Series Name', 'Series Code','1995 [YR1995]','2000 [YR2000]','2005 [YR2005]','2010 [YR2010]','2014 [YR2014]']]
 
-
-# In[10]:
 
 
 AccountsData_clean.head()
 
 
-# In[11]:
-
 
 AccountsSeries = pd.read_csv("data/Wealth-AccountSeries.csv")
 
-
-# In[12]:
 
 
 AccountsSeries_clean = AccountsSeries[['Code','Topic','Indicator Name','Long definition']]
 
 
-# In[13]:
-
 
 AccountsSeries_clean.head()
 
 
-# In[15]:
-
 
 cur, conn = create_database()
 
-
-# In[16]:
 
 
 accountcountry_table_create = ("""Create table if not exists accountsCountry(
@@ -112,14 +82,10 @@ accountcountry_table_create = ("""Create table if not exists accountsCountry(
                                Currency_Unit varchar)""")
 
 
-# In[17]:
-
 
 cur.execute(accountcountry_table_create)
 conn.commit()
 
-
-# In[18]:
 
 
 accountData_table_create = ("""Create table if not exists accountsData(
@@ -134,14 +100,10 @@ accountData_table_create = ("""Create table if not exists accountsData(
                                year_2014 varchar)""")
 
 
-# In[19]:
-
 
 cur.execute(accountData_table_create)
 conn.commit()
 
-
-# In[20]:
 
 
 accountSeries_table_create = ("""Create table if not exists accountsSeries(
@@ -151,14 +113,10 @@ accountSeries_table_create = ("""Create table if not exists accountsSeries(
                               Long_definition varchar)""")
 
 
-# In[21]:
-
 
 cur.execute(accountSeries_table_create)
 conn.commit()
 
-
-# In[22]:
 
 
 accountcountry_table_insert = ("""Insert into accountsCountry(
@@ -170,20 +128,14 @@ accountcountry_table_insert = ("""Insert into accountsCountry(
                                values(%s,%s,%s,%s,%s)""")
 
 
-# In[23]:
-
 
 for i,row in AccountsCountry_clean.iterrows():
     cur.execute(accountcountry_table_insert , list(row))
 
 
-# In[24]:
-
 
 conn.commit()
 
-
-# In[25]:
 
 
 accountData_table_insert = ("""Insert into accountsData(
@@ -199,14 +151,10 @@ accountData_table_insert = ("""Insert into accountsData(
                                values(%s,%s,%s,%s,%s,%s,%s,%s,%s)""")
 
 
-# In[26]:
-
 
 for i,row in AccountsData_clean.iterrows():
     cur.execute(accountData_table_insert , list(row))
 
-
-# In[29]:
 
 
 accountSeries_table_insert = ("""Insert into accountsSeries(
@@ -217,27 +165,20 @@ accountSeries_table_insert = ("""Insert into accountsSeries(
                               values(%s,%s,%s,%s)""")
 
 
-# In[31]:
-
 
 conn.commit()
 
-
-# In[32]:
 
 
 for i,row in AccountsSeries_clean.iterrows():
     cur.execute(accountSeries_table_insert , list(row))
 
 
-# In[33]:
-
 
 cur.close()
 conn.close()
 
 
-# In[ ]:
 
 
 
